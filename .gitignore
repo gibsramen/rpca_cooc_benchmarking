@@ -1,0 +1,9 @@
+# directories
+data/
+rpca_cooc_benchmarking.egg-info/
+*__pycache__/
+
+# Vim files
+*.swp
+
+*.DS_Store
