@@ -5,9 +5,8 @@ files produced by sparseDOSSA.
 
 from abc import abstractmethod
 import re
-from typing import Set
+from typing import Dict, List, Set
 
-import numpy as np
 import pandas as pd
 
 
@@ -21,12 +20,7 @@ class PCLFile():
         self.filetype = filetype
 
     def __str__(self):
-        print(f"PCLFile: {self.filelocation}")
-
-    @abstractmethod
-    def process(self):
-        """Process PCLFile"""
-        return
+        return f"{type(self).__name__}: {self.filelocation}"
 
 
 class PCLParamFile(PCLFile):
@@ -35,9 +29,6 @@ class PCLParamFile(PCLFile):
     def __init__(self, filelocation: str):
         super().__init__(filelocation, "Parameter")
         self.correlated_bugs, self.corr_coefs = self.get_bug_bug_info()
-
-    def process(self):
-        return
 
     def get_bug_bug_info(self):
         """Get correlations and coefficients"""
@@ -59,23 +50,40 @@ class PCLParamFile(PCLFile):
 class PCLAbundanceFile(PCLFile):
     """Base class for PCL abundance files"""
 
-    def __init__(self, filelocation: str):
-        super().__init__(filelocation, "Abundance")
+    def __init__(self, filelocation: str, filetype: str):
+        super().__init__(filelocation, filetype)
         self.samples = self.get_samples()
         self.datatypes = self.get_data_types()
+        self._matrix_dict = self.get_matrices()
         print(f"Data types: {self.datatypes}")
 
-    def process(self):
-        return
+    def get_data(self, datatype: str) -> pd.DataFrame:
+        """Return data from PCL file"""
+        return self._matrix_dict[datatype]
 
-    def get_samples(self) -> Set[str]:
+    def get_matrices(self) -> Dict[str, pd.DataFrame]:
+        """Extract data for each data type"""
+        matrix_dict = dict()
+        for datatype in self.datatypes:
+            data = [x for x in self._contents if x.startswith(datatype)]
+            data = [x.split("\t") for x in data]
+            data = pd.DataFrame(data)
+            data.set_index(0, drop=True, inplace=True)
+            data.index.name = datatype
+            data.columns = self.samples
+
+            matrix_dict[datatype] = data
+        return matrix_dict
+
+    def get_samples(self) -> List[str]:
         """Get sample names from simulated data"""
         samples = self._contents[0].split("\t")[1:]
-        return set(samples)
+        return samples
 
     def get_data_types(self) -> Set[str]:
         """Get types of data from simulated data"""
-        first_col = [x.split("\t")[0] for x in self._contents]
+        first_col = [x.split("\t")[0] for x in self._contents[1:]]
+        first_col = [x for x in first_col if not x.startswith("Metadata")]
         datatypes = set()
         for value in first_col:
             underscore_index = value.rfind("_")
