@@ -3,7 +3,6 @@
 files produced by sparseDOSSA.
 """
 
-from abc import abstractmethod
 import re
 from typing import Dict, List, Set
 
@@ -20,7 +19,7 @@ class PCLFile():
         self.filetype = filetype
 
     def __str__(self):
-        return f"{type(self).__name__}: {self.filelocation}"
+        return "{}: {}".format(type(self).__name__, self.filelocation)
 
 
 class PCLParamFile(PCLFile):
@@ -55,7 +54,7 @@ class PCLAbundanceFile(PCLFile):
         self.samples = self.get_samples()
         self.datatypes = self.get_data_types()
         self._matrix_dict = self.get_matrices()
-        print(f"Data types: {self.datatypes}")
+        print("Data types: {}".format(self.datatypes))
 
     def get_data(self, datatype: str) -> pd.DataFrame:
         """Return data from PCL file"""
@@ -72,7 +71,7 @@ class PCLAbundanceFile(PCLFile):
             data.index.name = datatype
             data.columns = self.samples
 
-            matrix_dict[datatype] = data
+            matrix_dict[datatype] = data.astype(float)
         return matrix_dict
 
     def get_samples(self) -> List[str]:

@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 """Test PCL processing"""
 
-import pytest
-
 from rpca_cooc_benchmarking import pcl
 
 REL_AB_FILE = "data/SyntheticMicrobiome.pcl"
