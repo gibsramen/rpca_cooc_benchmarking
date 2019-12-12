@@ -1,7 +1,10 @@
 # directories
-data/
+data/raw/
+data/reference/
+data/simulated/
 rpca_cooc_benchmarking.egg-info/
 *__pycache__/
+*.ipynb_checkpoints/
 
 # Vim files
 *.swp
