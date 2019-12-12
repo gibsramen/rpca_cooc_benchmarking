@@ -39,7 +39,8 @@ opt = parse_args(opt.parser)
 print(opt)
 
 if (!is.null(opt$counts)) {
-    data <- read.csv(opt$counts)
+    data <- read.csv(opt$counts, header=T, row.names=1)
+    print(head(data))
     sample_names <- rownames(data)
     feature_names <- colnames(data)
     data <- as.matrix(data)
@@ -50,18 +51,21 @@ if (!is.null(opt$counts)) {
     feature_names <- colnames(data)
     data.norm <- normalize_data(amgut1.filt)
 }
+print("Data normalized!")
 
 d <- ncol(data.norm)
 if (opt$edge_proportion < 0.5){
     stop("Edge proportion must be at least 0.5")
 }
 graph <- make_graph(opt$topology, d, opt$edge_proportion*d)
+print("Graph generated!")
 
 synth_data <- synthesize_data(
     data.norm,
     graph,
     distr=opt$distribution
 )
+print("Data synthesized!")
 
 synth_data <- as.data.frame(synth_data)
 rownames(synth_data) <- sample_names
