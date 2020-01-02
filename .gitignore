@@ -4,6 +4,7 @@ data/reference/
 data/simulated/
 rpca_cooc_benchmarking.egg-info/
 scripts/out/*
+scripts/sync_*
 *__pycache__/
 *.ipynb_checkpoints/
 

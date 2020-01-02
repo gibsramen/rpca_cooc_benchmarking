@@ -1,3 +1,5 @@
+library(dplyr)
+library(reshape2)
 library(SpiecEasi)
 
 normalize_data <- function(data){
@@ -42,3 +44,26 @@ synthesize_data <- function(data, graph, distr="zinegbin", ...){
     synth_data <- synth_comm_from_counts(data, distr=distr, Sigma=Cor, ...)
 }
 
+graph_to_adj_list <- function(graph){
+    # convert synthesized graph to adjacency matrix
+    #
+    # Parameters:
+    # -----------
+    #     graph: binary matrix of feature x feature interactions
+    #
+    # Returns:
+    # --------
+    #     adj_list: minimal adjacency list
+
+    df <- as.data.frame(graph)
+    df$feat <- rownames(df)
+    adj_list <- melt(df)
+    adj_list <- filter(adj_list, value == 1)
+
+    # save only unique interactions
+    adj_list <- unique(t(apply(adj_list[,1:2], 1, sort)))
+    adj_list <- as.data.frame(adj_list)
+    colnames(adj_list) <- c("F1", "F2")
+
+    return(adj_list)
+}

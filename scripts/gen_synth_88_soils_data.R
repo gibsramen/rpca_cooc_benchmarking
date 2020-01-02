@@ -1,0 +1,77 @@
+library(SpiecEasi)
+
+args <- commandArgs(trailingOnly=TRUE)
+if ( length(args) == 0 ){
+    stop("Must provide topology!")
+}
+topology <- args[1]
+
+setwd("/home/grahman/projects/rpca_cooc_benchmarking/scripts")
+dir.create(paste0("../data/simulated/qiita103/", topology))
+source("../rpca_cooc_benchmarking/R/synthesize_count_data.R")
+data <- read.csv("../data/processed/qiita103/88_soils_filt.csv", header=T, row.names=1)
+sample_names <- rownames(data)
+feature_names <- colnames(data)
+data.norm <- normalize_data(as.matrix(data))
+
+create_dataset <- function(data, feature_names, e, topology){
+    # data: normalized dataset
+    # e: number of edges
+    # topology: topology with which to create graph
+
+    d <- ncol(data)
+    set.seed(42)
+    graph <- SpiecEasi::make_graph(topology, d, e)
+    rownames(graph) <- feature_names
+    colnames(graph) <- feature_names
+
+    adj_list <- graph_to_adj_list(as.matrix(graph))
+
+    synth_data <- synthesize_data(
+        data,
+        graph,
+        distr="zinegbin"
+    )
+
+    return(list(synth_data=synth_data, adj_list=adj_list))
+}
+
+d <- ncol(data.norm)
+for ( e in round(seq(d/2 + 1, d, length.out=10)) ){
+    print(paste0("Number of edges: ", e))
+
+    out_base <- paste0(
+        "../data/simulated/qiita103/",
+        topology,
+        "/88_soils_filt_",
+        topology,
+        "_",
+        e,
+        "_edges"
+    )
+
+    out_data <- paste0(out_base, "_sim_data.csv")
+    out_adj_list <- paste0(out_base, "_sim_adj_list.csv")
+
+    current_time <- proc.time()
+
+    synth_output <- create_dataset(data.norm, feature_names, e, topology)
+    synth_data <- synth_output$synth_data
+    adj_list <- synth_output$adj_list
+    rownames(synth_data) <- sample_names
+    colnames(synth_data) <- feature_names
+
+    write.csv(
+        synth_data,
+        out_data,
+        row.names=T
+    )
+
+    write.csv(
+        adj_list,
+        out_adj_list,
+        row.names=F
+    )
+
+    print(proc.time() - current_time)
+}
