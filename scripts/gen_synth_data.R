@@ -4,12 +4,19 @@ args <- commandArgs(trailingOnly=TRUE)
 if ( length(args) == 0 ){
     stop("Must provide topology!")
 }
-topology <- args[1]
+
+data_loc <- args[1]
+out_dir <- args[2]
+out_name <- args[3]
+topology <- args[4]
+
+print(args)
 
 setwd("/home/grahman/projects/rpca_cooc_benchmarking/scripts")
-dir.create(paste0("../data/simulated/qiita103/", topology))
 source("../rpca_cooc_benchmarking/R/synthesize_count_data.R")
-data <- read.csv("../data/processed/qiita103/88_soils_filt.csv", header=T, row.names=1)
+
+dir.create(paste(out_dir, topology, sep="/"))
+data <- read.csv(data_loc, header=T, row.names=1)
 sample_names <- rownames(data)
 feature_names <- colnames(data)
 data.norm <- normalize_data(as.matrix(data))
@@ -41,9 +48,11 @@ for ( e in round(seq(d/2 + 1, d, length.out=10)) ){
     print(paste0("Number of edges: ", e))
 
     out_base <- paste0(
-        "../data/simulated/qiita103/",
+        out_dir,
         topology,
-        "/88_soils_filt_",
+        "/",
+        out_name,
+        "_",
         topology,
         "_",
         e,
