@@ -57,6 +57,7 @@ graph_to_adj_list <- function(graph){
 
     df <- as.data.frame(graph)
     df$feat <- rownames(df)
+    df$feat <- paste0("V", df$feat)
     adj_list <- melt(df)
     adj_list <- filter(adj_list, value == 1)
 

@@ -12,10 +12,10 @@ topology <- args[4]
 
 print(args)
 
-setwd("/home/grahman/projects/rpca_cooc_benchmarking/scripts")
+#setwd("/home/grahman/projects/rpca_cooc_benchmarking/scripts")
 source("../rpca_cooc_benchmarking/R/synthesize_count_data.R")
 
-dir.create(paste(out_dir, topology, sep="/"))
+dir.create(paste(out_dir, topology, sep="/"), recursive=T)
 data <- read.csv(data_loc, header=T, row.names=1)
 sample_names <- rownames(data)
 feature_names <- colnames(data)
@@ -29,8 +29,6 @@ create_dataset <- function(data, feature_names, e, topology){
     d <- ncol(data)
     set.seed(42)
     graph <- SpiecEasi::make_graph(topology, d, e)
-    rownames(graph) <- feature_names
-    colnames(graph) <- feature_names
 
     adj_list <- graph_to_adj_list(as.matrix(graph))
 
@@ -65,10 +63,9 @@ for ( e in round(seq(d/2 + 1, d, length.out=10)) ){
     current_time <- proc.time()
 
     synth_output <- create_dataset(data.norm, feature_names, e, topology)
-    synth_data <- synth_output$synth_data
+    synth_data <- as.data.frame(synth_output$synth_data)
+    rownames(synth_data) <- paste0("V", rownames(synth_data))
     adj_list <- synth_output$adj_list
-    rownames(synth_data) <- sample_names
-    colnames(synth_data) <- feature_names
 
     write.csv(
         synth_data,
