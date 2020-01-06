@@ -32,4 +32,4 @@ else
     TOPOLOGY="hub"
 fi
 
-Rscript --vanilla $SCRIPT $TOPOLOGY
+Rscript --vanilla $SCRIPT $DATA_LOC $OUT_DIR $OUT_NAME $TOPOLOGY
