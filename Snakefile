@@ -12,7 +12,7 @@ DATA_DICT = {
 
 include: "rules/process_raw_data.smk"
 
-rule all:
+rule process_raw_data:
     input:
         qza = expand(
             "data/processed/{qiita_id}/{qiita_id}_filt.qza",
