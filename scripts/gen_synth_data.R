@@ -42,6 +42,7 @@ create_dataset <- function(data, feature_names, e, topology){
 }
 
 d <- ncol(data.norm)
+count <- 0
 for ( e in round(seq(d/2 + 1, d, length.out=10)) ){
     print(paste0("Number of edges: ", e))
 
@@ -53,8 +54,7 @@ for ( e in round(seq(d/2 + 1, d, length.out=10)) ){
         "_",
         topology,
         "_",
-        e,
-        "_edges"
+        count
     )
 
     out_data <- paste0(out_base, "_sim_data.csv")
@@ -80,4 +80,5 @@ for ( e in round(seq(d/2 + 1, d, length.out=10)) ){
     )
 
     print(proc.time() - current_time)
+    count <- count + 1
 }

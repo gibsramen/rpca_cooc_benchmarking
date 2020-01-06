@@ -1,0 +1,10 @@
+ROOT: .
+data: data/
+raw: data/raw/
+proc: data/processed/
+sim: data/simulated/
+num_synth_datasets: 10
+topologies:
+    - cluster
+    - erdos_renyi
+    - hub
