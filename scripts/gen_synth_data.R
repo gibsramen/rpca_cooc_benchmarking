@@ -48,6 +48,7 @@ for ( e in round(seq(d/2 + 1, d, length.out=10)) ){
 
     out_base <- paste0(
         out_dir,
+        "/",
         topology,
         "/",
         out_name,
@@ -64,7 +65,7 @@ for ( e in round(seq(d/2 + 1, d, length.out=10)) ){
 
     synth_output <- create_dataset(data.norm, feature_names, e, topology)
     synth_data <- as.data.frame(synth_output$synth_data)
-    rownames(synth_data) <- paste0("V", rownames(synth_data))
+    rownames(synth_data) <- paste0("S", rownames(synth_data))
     adj_list <- synth_output$adj_list
 
     write.csv(

@@ -3,6 +3,7 @@ data: data/
 raw: data/raw/
 proc: data/processed/
 sim: data/simulated/
+res: data/results/
 num_synth_datasets: 10
 topologies:
     - cluster
