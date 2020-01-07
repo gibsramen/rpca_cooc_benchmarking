@@ -51,7 +51,5 @@ rule synthesize_data:
     params:
         this_script = "scripts/gen_synth_data.R",
         out_dir = SIM + "{qiita_id}/"
-    conda:
-        "environment.yml"
     shell:
         "Rscript {params.this_script} {input} {params.out_dir} {qiita_id} {topology}"
