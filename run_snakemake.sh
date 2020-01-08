@@ -1,4 +1,5 @@
 #!/bin/bash
+# Script to run on barnacle
 
 snakemake \
     -j 5 \
