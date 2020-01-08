@@ -1,6 +1,7 @@
 # directories
 data/raw/
 data/reference/
+*old/
 rpca_cooc_benchmarking.egg-info/
 scripts/out/*
 scripts/sync_*

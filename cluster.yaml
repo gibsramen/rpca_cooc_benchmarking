@@ -1,11 +1,15 @@
 default:
-    time: 1:00:00
+    time: 4:00:00
     wd: scripts/
     name: rpca_cooc_default
     pmem: 4gb
     vmem: 6gb
     nodes: 1:ppn=10
     out: scripts/out
+
+run_deicode:
+    time: 6:00:00
+    name: run_deicode
 
 synthesize_data:
     time: 12:00:00

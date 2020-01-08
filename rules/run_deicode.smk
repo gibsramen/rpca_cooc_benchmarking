@@ -12,7 +12,6 @@ def load_biom(feature_csv):
     b = biom.table.Table(df.T.values, features, samples)
     return biom
 
-
 rule get_feature_matrix:
     input:
         SIM + (

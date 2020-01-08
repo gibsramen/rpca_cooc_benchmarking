@@ -1,8 +1,6 @@
 import glob
 import re
 
-from snakemake.utils import validate
-
 # ---------------Configuration---------------
 configfile: "config.yaml"
 
@@ -41,6 +39,14 @@ rule run_deicode:
             topology=config["topologies"],
             num=range(0, config["num_synth_datasets"]),
         )
+
+rule create_dirs:
+    input:
+        directory(expand(
+            RES + "{qiita_id}/{topology}/rpca_feature_matrices",
+            qiita_id=ALL_IDS,
+            topology=config["topologies"],
+        ))
 
 rule synthesize_data:
     input:
