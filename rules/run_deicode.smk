@@ -12,38 +12,17 @@ def load_biom(feature_csv):
     b = biom.table.Table(df.T.values, features, samples)
     return biom
 
-rule make_feature_matrix_dirs:
-    output:
-        directory(
-            expand(
-                RES + "{qiita_id}/{topology}/rpca_feature_matrices",
-                qiita_id=ALL_IDS,
-                topology=config["topologies"],
-            ),
-        )
-    shell:
-        "mkdir {output}"
 
 rule get_feature_matrix:
     input:
-        expand(
-            SIM + (
-                "{qiita_id}/{topology}/{qiita_id}_{topology}_{num}"
-                "_sim_data.csv"
-            ),
-            qiita_id=ALL_IDS,
-            topology=config["topologies"],
-            num=range(0, config["num_synth_datasets"]),
+        SIM + (
+            "{qiita_id}/{topology}/{qiita_id}_{topology}_{num}"
+            "_sim_data.csv"
         )
     output:
-        expand(
-            RES + (
-                "{qiita_id}/{topology}/rpca_feature_matrices/"
-                "{qiita_id}_{topology}_{num}_rpca_feat_mat.csv"
-            ),
-            qiita_id=ALL_IDS,
-            topology=config["topologies"],
-            num=range(0, config["num_synth_datasets"]),
+        RES + (
+            "{qiita_id}/{topology}/rpca_feature_matrices/"
+            "{qiita_id}_{topology}_{num}_rpca_feat_mat.csv"
         )
     run:
         ordination, samp_mat, feat_mat = rpca(

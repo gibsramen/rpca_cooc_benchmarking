@@ -1,3 +1,4 @@
+library(here)
 library(SpiecEasi)
 
 args <- commandArgs(trailingOnly=TRUE)
@@ -13,7 +14,8 @@ topology <- args[4]
 print(args)
 
 #setwd("/home/grahman/projects/rpca_cooc_benchmarking/scripts")
-source("../rpca_cooc_benchmarking/R/synthesize_count_data.R")
+setwd(here())
+source("rpca_cooc_benchmarking/R/synthesize_count_data.R")
 
 dir.create(paste(out_dir, topology, sep="/"), recursive=T)
 data <- read.csv(data_loc, header=T, row.names=1)
