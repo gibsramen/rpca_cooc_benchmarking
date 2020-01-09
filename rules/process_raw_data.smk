@@ -6,14 +6,7 @@ import pandas as pd
 from qiime2 import Artifact
 from qiime2.plugins import feature_table
 
-# process all raw bioms and save to processed data subdirectory
-ALL_BIOMS = glob.glob("data/raw/*/*.biom")
-ALL_IDS = [re.search(r"qiita\d*", x).group() for x in ALL_BIOMS]
-
-DATA_DICT = {
-    this_biom:this_qiita_id
-    for this_biom, this_qiita_id in zip(ALL_BIOMS, ALL_IDS)
-}
+localrules: biom_to_qza, filter_feature_table, save_to_csv
 
 def get_qiita_id(biom_file):
     return DATA_DICT[biom_file]
@@ -40,9 +33,13 @@ rule filter_feature_table:
         "data/processed/{qiita_id}/{qiita_id}_filt.qza"
     shell:
         "qiime feature-table filter-features \
-        --i-table {input} \
-        --p-min-frequency 10 \
-        --o-filtered-table {output}"
+         --i-table {input} \
+         --p-min-frequency 10 \
+         --o-filtered-table {output}; \
+         qiime feature-table filter-samples \
+         --i-table {output} \
+         --p-min-frequency 500 \
+         --o-filtered-table {output}"
 
 rule save_to_csv:
     input:

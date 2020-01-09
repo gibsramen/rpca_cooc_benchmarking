@@ -12,9 +12,12 @@ rule synth:
         )
     params:
         this_script = "scripts/gen_synth_data.R",
-        out_dir = SIM + "{wildcards.qiita_id}/"
+        out_dir = lambda wildcards: SIM + wildcards.qiita_id + "/"
+    conda:
+        "../environment.yaml"
     shell:
-        "Rscript --vanilla \
+         "R --slave -e $'library(devtools); install_github(\"zdk123/SpiecEasi\")'; \
+          Rscript --vanilla \
             {params.this_script} \
             {input} \
             {params.out_dir} \

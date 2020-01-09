@@ -75,12 +75,15 @@ for ( e in round(seq(d/2 + 1, d, length.out=10)) ){
         out_data,
         row.names=T
     )
+    print(paste0("data written to ", out_data))
 
     write.csv(
         adj_list,
         out_adj_list,
         row.names=F
     )
+
+    print(paste0("data written to ", out_adj_list))
 
     print(proc.time() - current_time)
     count <- count + 1

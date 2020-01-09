@@ -10,7 +10,7 @@ def load_biom(feature_csv):
     samples = list(df.index)
     features = list(df.columns)
     b = biom.table.Table(df.T.values, features, samples)
-    return biom
+    return b
 
 rule get_feature_matrix:
     input:
@@ -25,8 +25,8 @@ rule get_feature_matrix:
         )
     run:
         ordination, samp_mat, feat_mat = rpca(
-            table=load_biom("{input}"),
+            table=load_biom(input[0]),
             n_components=2,
         )
         feat_mat_df = feat_mat.to_data_frame()
-        feat_mat_df.write_csv("{output}", index=True)
+        feat_mat_df.to_csv(output[0], index=True)

@@ -21,12 +21,13 @@ wildcard_constraints:
 # process all raw bioms and save to processed data subdirectory
 ALL_BIOMS = glob.glob("data/raw/*/*.biom")
 ALL_IDS = [re.search(r"qiita\d*", x).group() for x in ALL_BIOMS]
+DATA_DICT = {b:q_id for b, q_id in zip(ALL_BIOMS, ALL_IDS)}
 
 include: "rules/process_raw_data.smk"
 include: "rules/synthesize_data.smk"
 include: "rules/run_deicode.smk"
 
-localrules: process_raw_data
+localrules: run_deicode, synthesize_data, process_raw_data
 
 rule run_deicode:
     input:
@@ -40,13 +41,6 @@ rule run_deicode:
             num=range(0, config["num_synth_datasets"]),
         )
 
-rule create_dirs:
-    input:
-        directory(expand(
-            RES + "{qiita_id}/{topology}/rpca_feature_matrices",
-            qiita_id=ALL_IDS,
-            topology=config["topologies"],
-        ))
 
 rule synthesize_data:
     input:
