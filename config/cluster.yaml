@@ -7,7 +7,6 @@ __default__:
     nodes: 1:ppn=10
 
 get_feature_matrix:
-    time: 2:00:00
     name: get_rpca_feat_mat
 
 synth:

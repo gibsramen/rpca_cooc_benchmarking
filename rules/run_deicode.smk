@@ -2,7 +2,7 @@ import biom
 import pandas as pd
 import skbio
 
-from deicode.rpca import rpca
+from deicode.rpca import auto_rpca
 
 
 def load_biom(feature_csv):
@@ -24,9 +24,8 @@ rule get_feature_matrix:
             "{qiita_id}_{topology}_{num}_rpca_feat_mat.csv"
         )
     run:
-        ordination, samp_mat, feat_mat = rpca(
+        ordination, samp_mat, feat_mat = auto_rpca(
             table=load_biom(input[0]),
-            n_components=2,
         )
         feat_mat_df = feat_mat.to_data_frame()
         feat_mat_df.to_csv(output[0], index=True)

@@ -1,6 +1,8 @@
 # directories
 data/raw/
 data/reference/
+data/simulated/
+*rpca_feat_mat.csv
 *old/
 rpca_cooc_benchmarking.egg-info/
 scripts/out/*

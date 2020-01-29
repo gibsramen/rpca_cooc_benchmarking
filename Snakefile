@@ -2,7 +2,7 @@ import glob
 import re
 
 # ---------------Configuration---------------
-configfile: "config.yaml"
+configfile: "config/config.yaml"
 
 DATA = config["data"]
 PROC = config["proc"]

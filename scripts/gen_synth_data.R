@@ -29,7 +29,7 @@ create_dataset <- function(data, feature_names, e, topology){
     # topology: topology with which to create graph
 
     d <- ncol(data)
-    set.seed(42)
+    set.seed(63)
     graph <- SpiecEasi::make_graph(topology, d, e)
 
     adj_list <- graph_to_adj_list(as.matrix(graph))
