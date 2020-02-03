@@ -27,7 +27,18 @@ include: "rules/process_raw_data.smk"
 include: "rules/synthesize_data.smk"
 include: "rules/run_deicode.smk"
 
-localrules: run_deicode, synthesize_data, process_raw_data
+localrules: run_deicode, synthesize_data, process_raw_data, all_rocs
+
+rule all_rocs:
+    input:
+        expand(
+            RES + (
+                "{qiita_id}/{topology}/roc/{qiita_id}_{topology}_{num}_roc.png"
+            ),
+            qiita_id=ALL_IDS,
+            topology=config["topologies"],
+            num=range(0, config["num_synth_datasets"]),
+        )
 
 rule run_deicode:
     input:

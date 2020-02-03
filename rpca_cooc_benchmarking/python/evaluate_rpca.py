@@ -16,8 +16,6 @@ def get_roc_curve(adj_df, feat_mat, n):
     truth_class = util.adj_list_to_class(adj_df, n)
     test_class = util.reshape_mat(feat_mat)
 
-    print(len(truth_class), len(test_class))
-
     fpr, tpr, thresholds = roc_curve(
         y_true=truth_class,
         y_score=test_class,
@@ -29,7 +27,7 @@ def get_roc_curve(adj_df, feat_mat, n):
     )
     return fpr, tpr, thresholds, auc_score
 
-def plot_roc(fpr, tpr, thresholds, auc_score, **kwargs):
+def plot_roc(fpr, tpr, thresholds, auc_score, output, **kwargs):
     plt.rcParams["font.family"] = "sans-serif"
     plt.rcParams["font.sans-serif"] = "DejaVu Sans"
     fig, ax = plt.subplots(1, 1, figsize=(10, 10))
@@ -38,4 +36,4 @@ def plot_roc(fpr, tpr, thresholds, auc_score, **kwargs):
     ax.plot([0, 1], [0, 1], linestyle="--", color="black")
     ax.set_title(f"AUC: {round(auc_score, 2)}")
 
-    plt.savefig("test.png", dpi=300)
+    plt.savefig(output, dpi=300)

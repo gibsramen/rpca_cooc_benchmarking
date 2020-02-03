@@ -2,6 +2,7 @@
 data/raw/
 data/reference/
 data/simulated/
+results/*/*/rpca_feature_matrices/
 *rpca_feat_mat.csv
 *old/
 rpca_cooc_benchmarking.egg-info/

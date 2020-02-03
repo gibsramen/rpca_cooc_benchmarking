@@ -14,3 +14,6 @@ synth:
     name: gen_synth_data
     pmem: 8gb
     vmem: 12gb
+
+create_roc:
+    name: rpca_roc
